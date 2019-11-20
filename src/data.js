@@ -52,8 +52,8 @@ export const filtrarPokemones = (arr, tPokemones) => {
   
   for (let i = 0; i < arr.length; i += 1) {
     const tipoFiltrado = arr[i].type;
-    const resultado = tipoFiltrado.filter((elemento) => elemento === tPokemones);
-    if (resultado !== '') {
+    const resultado = tipoFiltrado.filter(elemento => elemento === tPokemones);
+    if (resultado !=git  '') {
       arregloFiltradoPokemones.push(arr[i]);
     }
 }
@@ -91,9 +91,9 @@ export const buscarPokemonNombre = (arr, nombrePokemonBuscar) => {
 //   return arrBuscaPokemon;
 // },
 
-export const buscarPokemonId = (arr, idPokemonABuscar) => {
-  const arrBuscaPokemon = [];
-  arrBuscaPokemon.push(arr.find((elemento) => elemento.id === idPokemonABuscar));
-  return arrBuscaPokemon;
-};
+// export const buscarPokemonId = (arr, idPokemonABuscar) => {
+//   const arrBuscaPokemon = [];
+//   arrBuscaPokemon.push(arr.find((elemento) => elemento.id === idPokemonABuscar));
+//   return arrBuscaPokemon;
+// };
 

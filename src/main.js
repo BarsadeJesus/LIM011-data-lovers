@@ -7,11 +7,11 @@ import {
   ordenarAscOdescData,
   filtrarPokemones,
   mostrarTop,
-  buscarPokemon,
+  buscarPokemonNombre,
 } from './data.js';
 
-const contenedorPokemons = document.querySelector('#contenedor-pokemons');
-const contenedorPokemonsModal=document.querySelector("#pantalla-Modal");
+//const contenedorPokemons = document.querySelector('#contenedor-pokemons');
+//const contenedorPokemonsModal=document.querySelector("#pantalla-Modal");
 
 const radioInput = document.querySelectorAll('input[name=ordena]');
 
@@ -57,34 +57,28 @@ const containerElements = (obj) => {
   return divElement;
 };
 
-const generarTemplatePokemones = (arr) => {
-  arr.forEach((obj) => {
-    document.querySelector('#contenedor-pokemons').appendChild(containerElements(obj));
-  });
-};
-    catalogoImagenes += `
-    <div class="pokemonModal" align="center">
-    <img src = "${obj.imagen}"/>
-    <h1>${obj.identificador}</h1><p>${obj.nombre}</p>
-    </div>
-    `;
-  });
+// const generarTemplatePokemones = (arr) => {
+//   arr.forEach((obj) => {
+//     document.querySelector('#contenedor-pokemons').appendChild(containerElements(obj));
+//     catalogoImagenes += `
+//     <div class="pokemonModal" align="center">
+//     <img src = "${obj.imagen}"/>
+//     <h1>${obj.identificador}</h1><p>${obj.nombre}</p>
+//     </div>
+//     `;
+//   });
   
-  return catalogoImagenes;
+//   return catalogoImagenes;
+// };
+
+const generarTemplatePokemones = (arr) => {
+    arr.forEach((obj) => {
+      document.querySelector('#contenedor-pokemons').appendChild(containerElements(obj));
+    });
 };
 
-const generarTemplatePokemonesModal = (obj) => {
-  `
-    <div align="center">
-    <img src = "${obj.imagen}"/>
-    <h1> ${obj.identificador}</h1><p>  ${obj.nombre}</p>
-    <p> ${obj.altura}</p><p> ${obj.peso}</p>
-    </div>
-    `;
-};
 
-const template = generarTemplatePokemones(traerDataPokemon(POKEMON));
-const templateModal= generarTemplatePokemonesModal(traerDataPokemonModal(POKEMON));
+// const templateModal= generarTemplatePokemonesModal(traerDataPokemonModal(POKEMON));
 
 // const generarTemplatePokemonesModal = (obj) => {
 //   `
@@ -134,26 +128,26 @@ generarTemplatePokemones(traerDataPokemon(POKEMON));
 // pintarPokemonesEnPantalla(template, contenedorPokemons);
 // pintarPokemonesEnPantallaModal(templateModal, contenedorPokemonsModal);
 
-const clasePokemonModal=document.querySelectorAll('.pokemonModal')
-console.log(clasePokemonModal)
+// const clasePokemonModal=document.querySelectorAll('.pokemonModal')
+// console.log(clasePokemonModal)
 
-for (let i = 0; i < clasePokemonModal.length; i += 1) {
-  clasePokemonModal[i].addEventListener('click', (event) => {
-    const idPokemonABuscar = clasePokemonModal[i].children[1].firstChild;
-    console.log(idPokemonABuscar);
-    console.log(buscarPokemonId)
-    const pokemonBuscadoPorId = traerDataPokemonModal(buscarPokemonId(POKEMON, idPokemonABuscar));
-    console.log(pokemonBuscadoPorId)
-    // const pintarPokemonBuscadoModal = generarTemplatePokemonesModal(pokemonBuscadoPorId);
-    // pintarPokemonesEnPantallaModal(pintarPokemonBuscadoModal, contenedorPokemonsModal);
-  });
-};
+// for (let i = 0; i < clasePokemonModal.length; i += 1) {
+//   clasePokemonModal[i].addEventListener('click', (event) => {
+//     const idPokemonABuscar = clasePokemonModal[i].children[1].firstChild;
+//     console.log(idPokemonABuscar);
+//     console.log(buscarPokemonId)
+//     const pokemonBuscadoPorId = traerDataPokemonModal(buscarPokemonId(POKEMON, idPokemonABuscar));
+//     console.log(pokemonBuscadoPorId)
+//     // const pintarPokemonBuscadoModal = generarTemplatePokemonesModal(pokemonBuscadoPorId);
+//     // pintarPokemonesEnPantallaModal(pintarPokemonBuscadoModal, contenedorPokemonsModal);
+//   });
+// };
 
 
 const inputBuscaPokemon = document.getElementById('buscaPokemon');
 inputBuscaPokemon.addEventListener('click', () => {
   const nombrePokemonBuscar = document.getElementById('buscar').value;
-  const muestraPokemon = traerDataPokemon(buscarPokemon((POKEMON), nombrePokemonBuscar));
+  const muestraPokemon = traerDataPokemon(buscarPokemonNombre((POKEMON), nombrePokemonBuscar));
   document.querySelector('#contenedor-pokemons').innerHTML = '';
   generarTemplatePokemones(muestraPokemon);
 });
