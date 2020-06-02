@@ -3,197 +3,85 @@ import POKEMON from './data/pokemon/pokemon.js';
 
 import {
   traerDataPokemon,
-  // traerDataPokemonModal,
   ordenarAscOdescData,
   filtrarPokemones,
   mostrarTop,
-  buscarPokemonNombre,
+  //buscarPokemon,
+  buscadorPrimerasLetrasNombre,
+  filtrarPorCandy,
 } from './data.js';
-
-//const contenedorPokemons = document.querySelector('#contenedor-pokemons');
-//const contenedorPokemonsModal=document.querySelector("#pantalla-Modal");
 
 const radioInput = document.querySelectorAll('input[name=ordena]');
 
-// const modal = (obj) => {
-// const divElement = document.createElement('div');
-// divElement.classList.add('modalDialog');
-// divElement.innerHTML =  `
-// <div class="modal-contenido">
-// <a href="#close" title="Close" class="close">X</a>
-// <h2>${obj.name}</h2>
-// <p>${obj.weight}</p>
-// <div id="prevolucion"></div>
-// </div> 
-// `;
-// return divElement;
-// }
-
-const containerElements= (obj) => {
-  const divElement = document.createElement("div");
+const containerElements = (obj) => {
+  const divElement = document.createElement('div');
   divElement.innerHTML = `
   <img class="imagenPokemon" src = "${obj.imagen}"/>
   <h1>${obj.identificador}</h1><p>${obj.nombre}</p>
   `;
-  divElement.addEventListener('click', () => {
+  divElement.addEventListener('click', (event) => {
+    event.preventDefault();
     const divElem = document.createElement('div');
     divElem.classList.add('modalDialog');
-    if(obj.multiplicador===null || obj.caramelos === undefined){
     divElem.innerHTML = `
     <div>
       <a href = "#close" title = "Close" class = "close">X</a>
+      <seccion class="nomImagen">
       <h2>${obj.nombre.toUpperCase()}</h2>
-      <img class="imagenPokemon" src = "${obj.imagen}"/>
-      <p>Peso: ${obj.peso}  Altura: ${obj.altura} Tipo: ${obj.tipo}</p>
-      <p>Caramelos: No tiene asignada esta propiedad</p>
-      <p>Multiplicador: No tiene asignado un multiplicador</p>
-      <div id="prevolucion">
-        <p>Sig. evolucion: ${obj.siguiente_evolucion}</p>
-      </div>
+      <img class ="imagenPokemon" src = "${obj.imagen}"/>
+      </seccion>
+      <seccion class="descripcion">
+      <br/>
+      <p>Peso:    ${obj.peso}</p>
+      <p> Altura:     ${obj.altura}</p>
+      <p> Tipo:   ${obj.tipo}</p>
+      <p>Caramelos:    ${obj.cant_caramelos}</p>
+      <p>Multiplicador:   ${obj.multiplicador}</p>
+      </seccion>
+      <seccion class="evolucion">
+      <h2 class="centrarTitulo">EVOLUCIONES</h2>
+      <figure id="evoluciones">
+      </figure></seccion>
     </div> 
-    `} else { divElem.innerHTML = `
-    <div>
-      <a href = "#close" title = "Close" class = "close">X</a>
-      <h2>${obj.nombre.toUpperCase()}</h2>
-      <img class="imagenPokemon" src = "${obj.imagen}"/>
-      <p>Peso: ${obj.peso}  Altura: ${obj.altura}</p>
-      <p>Tipo: ${obj.tipo}</p>
-      <p>Caramelos: ${obj.caramelos}</p>
-      <p>Multiplicador: ${obj.multiplicador}</p>
-      <div id="prevolucion">
-      <p>Sig. evolucion: ${obj.siguiente_evolucion}</p></div>
-    </div> 
-    `
-
+    `;
+    document.getElementById("contenedor-modal").appendChild(divElem);
+    const arregloCaramelos = filtrarPorCandy((POKEMON), obj.caramelos);
+    if(obj.caramelos !== 'None'){
+      for (let i = 0; i < arregloCaramelos.length; i += 1) {
+        document.getElementById("evoluciones").innerHTML += ` 
+        <img class ="imagenPokemon" src ="${arregloCaramelos[i]}"/>
+        `;
+        document.querySelector("#contenedor-modal").appendChild(divElem);
+      }
     };
-   
     divElem.style.display = 'block';
     divElem.querySelector('.close').addEventListener('click', () => {
-      divElem.style.display = 'none';
+    divElem.classList.remove("modalDialog");
+    document.querySelector('#contenedor-modal').innerHTML = '';
     });
-    divElement.appendChild(divElem);
   });
-
   return divElement;
-};
-
-// const generarTemplatePokemones = (arr) => {
-//   arr.forEach((obj) => {
-//     document.querySelector('#contenedor-pokemons').appendChild(containerElements(obj));
-//     catalogoImagenes += `
-//     <div class="pokemonModal" align="center">
-//     <img src = "${obj.imagen}"/>
-//     <h1>${obj.identificador}</h1><p>${obj.nombre}</p>
-//     </div>
-//     `;
-//   });
-  
-//   return catalogoImagenes;
-// };
-
+}
 const generarTemplatePokemones = (arr) => {
-    arr.forEach((obj) => {
-      document.querySelector('#contenedor-pokemons').appendChild(containerElements(obj));
-    });
+  arr.forEach((obj) => {
+    document.querySelector('#contenedor-pokemons').appendChild(containerElements(obj));
+  });
 };
-
-
-// const templateModal= generarTemplatePokemonesModal(traerDataPokemonModal(POKEMON));
-
-// const generarTemplatePokemonesModal = (obj) => {
-//   `
-//     <div align="center">
-//     <img src = "${obj.imagen}"/>
-//     <h1> ${obj.identificador}</h1><p>${obj.nombre}</p>
-//     <p> ${obj.altura}</p><p> ${obj.peso}</p>
-//     </div>
-//     `;
-// };
-
 generarTemplatePokemones(traerDataPokemon(POKEMON));
-// const template = generarTemplatePokemones(traerDataPokemon(POKEMON))
-// const templateModal = generarTemplatePokemonesModal(traerDataPokemonModal(POKEMON));
-
-// const pintarPokemonesEnPantalla = (plantilla, id) => {
-// document.querySelector(id).innerHTML = '';
-// document.querySelector(id).innerHTML = plantilla;
-// };
-
-// pintarPokemonesEnPantalla(template, '#contenedor-pokemons');
-
-// const clasePokemonModal = document.querySelectorAll('.pokemonModal');
-// console.log(clasePokemonModal)
-// for (let i = 0; i < clasePokemonModal.length; i += 1) {
-// clasePokemonModal[i].addEventListener('click', (event) => {
-// let idPokemonABuscar = clasePokemonModal[i].children[1].firstChild;
-// console.log('id capturado', idPokemonABuscar);
-// let cantidad=idPokemonABuscar.ty;
-// console.log(cantidad);
-// let posPokemonModal = parseInt(idPokemonABuscar);
-// console.log('id posicion', posPokemonModal);
-// console.log(POKEMON[idPokemonABuscar])
-// const arrBuscaPokemon = [];
-// arrBuscaPokemon.push(POKEMON.find((POKEMON) => elemento.id === idPokemonABuscar));
-// console.log(arrBuscaPokemon)
-// const pokemonBuscadoPorId = traerDataPokemonModal(buscarPokemonId((POKEMON), idPokemonABuscar));
-// console.log('id de pokemon',pokemonBuscadoPorId)
-// const pintarPokemonBuscadoModal = generarTemplatePokemonesModal(pokemonBuscadoPorId);
-// pintarPokemonesEnPantallaModal(pintarPokemonBuscadoModal, '#miModal');
-
-// const pintarPokemonesEnPantallaModal = (plantilla, nodoDom) => {
-//   nodoDom.innerHTML = '';
-//   nodoDom.innerHTML = plantilla;
-// };
-
-// pintarPokemonesEnPantalla(template, contenedorPokemons);
-// pintarPokemonesEnPantallaModal(templateModal, contenedorPokemonsModal);
-
-// const clasePokemonModal=document.querySelectorAll('.pokemonModal')
-// console.log(clasePokemonModal)
-
-// for (let i = 0; i < clasePokemonModal.length; i += 1) {
-//   clasePokemonModal[i].addEventListener('click', (event) => {
-//     const idPokemonABuscar = clasePokemonModal[i].children[1].firstChild;
-//     console.log(idPokemonABuscar);
-//     console.log(buscarPokemonId)
-//     const pokemonBuscadoPorId = traerDataPokemonModal(buscarPokemonId(POKEMON, idPokemonABuscar));
-//     console.log(pokemonBuscadoPorId)
-//     // const pintarPokemonBuscadoModal = generarTemplatePokemonesModal(pokemonBuscadoPorId);
-//     // pintarPokemonesEnPantallaModal(pintarPokemonBuscadoModal, contenedorPokemonsModal);
-//   });
-// };
-
-
-const inputBuscaPokemon = document.getElementById('buscaPokemon');
+/* const inputBuscaPokemon = document.getElementById('buscaPokemon');
 inputBuscaPokemon.addEventListener('click', () => {
   const nombrePokemonBuscar = document.getElementById('buscar').value;
-  const muestraPokemon = traerDataPokemon(buscarPokemonNombre((POKEMON), nombrePokemonBuscar));
-  document.querySelector('#contenedor-pokemons').innerHTML = '';
+  const muestraPokemon = traerDataPokemon(buscarPokemon((POKEMON), nombrePokemonBuscar));
+  document.querySelector('#contenedor-pokemons').innerHTML='';
   generarTemplatePokemones(muestraPokemon);
-});
-
-//   const muestraPokemon = traerDataPokemon(buscarPokemonNombre((POKEMON), nombrePokemonBuscar));
-//   const pintarMuestraPokemon = generarTemplatePokemones(muestraPokemon);
-//   pintarPokemonesEnPantalla(pintarMuestraPokemon, contenedorPokemons);
-// });
-
-// const filtrarTipoDePokemones = document.getElementById('tipoPokemones');
-// filtrarTipoDePokemones.addEventListener('change', () => {
-//   const tPokemones = filtrarTipoDePokemones.value;
-//   const arregloFiltrado = traerDataPokemon(filtrarPokemones((POKEMON), tPokemones));
-//   const pintarArregloFiltrado = generarTemplatePokemones(arregloFiltrado);
-//   pintarPokemonesEnPantalla(pintarArregloFiltrado, contenedorPokemons);
-// });
-
+}); */
 const desple = document.getElementById('desple');
 desple.addEventListener('click', (event) => {
   const tPokemones = event.target.id;
-  console.log(tPokemones)
   const arregloFiltrado = traerDataPokemon(filtrarPokemones((POKEMON), tPokemones));
   document.querySelector('#contenedor-pokemons').innerHTML = '';
   generarTemplatePokemones(arregloFiltrado);
 });
-
 for (let i = 0; i < radioInput.length; i += 1) {
   radioInput[i].addEventListener('change', (event) => {
     const string = event.target.id;
@@ -208,9 +96,9 @@ btnBuscarTop10.addEventListener('click', () => {
   document.querySelector('#contenedor-pokemons').innerHTML = '';
   generarTemplatePokemones(arregloMuestraTop);
 });
-
-// const pElement=document.createElement("p");
-// const pElement1= `<p></p>`;
-
-//document.getElementById("example").appendChild(pElement);
-//document.getElementById("example").innerHTML=pElement
+const buscaNombre=document.getElementById('buscar');
+buscaNombre.addEventListener('input',(event) => {
+  const pokeBuscado = traerDataPokemon(buscadorPrimerasLetrasNombre((POKEMON), event.target.value));
+  document.querySelector('#contenedor-pokemons').innerHTML = '';
+  generarTemplatePokemones(pokeBuscado);
+})
